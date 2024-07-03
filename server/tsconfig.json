@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "ES2016",
+        "module": "commonjs",
+        "outDir": "./dist",
+        "rootDir": "./",
+        "strict": true,
+        "esModuleInterop": true,
+        "baseUrl": ".",
+        "paths": {
+            "y-websocket/bin/utils": ["node_modules/y-websocket/dist/bin/utils.d.cts"]
+        }
+    },
+    "include": ["server.ts", "types.d.ts"],
+    "exclude": ["node_modules"]
+}
