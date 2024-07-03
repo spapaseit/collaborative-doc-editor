@@ -1,26 +1,18 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { UserNameInput, UserProvider } from "./identity";
+import { RumiEditor } from "./editor";
+import { AppContainer, DocumentContainer } from "./AppStyles";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App: React.FC = () => (
+    <UserProvider>
+        <AppContainer>
+            <h1>Collaborative Document Editor</h1>
+            <UserNameInput />
+            <DocumentContainer>
+                <RumiEditor />
+            </DocumentContainer>
+        </AppContainer>
+    </UserProvider>
+);
 
 export default App;
