@@ -1,14 +1,15 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Quill from "quill";
 import * as Y from "yjs";
 import { QuillBinding } from "y-quill";
 import { WebsocketProvider } from "y-websocket";
 import QuillCursors from "quill-cursors";
 import "quill/dist/quill.bubble.css";
-import { useUser } from "../identity";
 import config from "../config";
 import { styled } from "styled-components";
-// import "./Editor.css";
+import { randomHexColor } from "../utils/color-utils";
+import { useLocation } from "react-router-dom";
+import { useUrlParams } from "../hooks";
 
 Quill.register("modules/cursors", QuillCursors);
 
@@ -21,43 +22,84 @@ const EditorContainer = styled.div`
         border: none;
     }
 
-    .ql-container .ql-snow {
-        border: none;
-        display: flex;
-        justify-content: center;
+    .ql-container {
+        overflow: visible;
+        // font-family: Georgia, serif;
+        // font-size: 16px;
+
+        .ql-snow {
+            border: none;
+            display: flex;
+            justify-content: center;
+        }
     }
 `;
 
-const RumiEditor: React.FC = () => {
-    const quillRef = useRef<HTMLDivElement>(null);
-    const { userName } = useUser();
+interface Props {
+    setProvider: (provider: WebsocketProvider | null) => void;
+}
+
+const RumiEditor: React.FC<Props> = ({ setProvider }) => {
+    const [quill, setQuill] = useState<Quill>();
+    // const location = useLocation();
+    // const params = new URLSearchParams(location.search);
+    // const userName = params.get("userName") || "Anonymous";
+    // const documentName = params.get("documentName") || "default-room";
+
+    const { documentName, userName } = useUrlParams();
+
+    const wrapperRef = useCallback((wrapper: HTMLDivElement | null) => {
+        if (wrapper == null) return;
+
+        wrapper.innerHTML = "";
+        const editor = document.createElement("div");
+        wrapper.append(editor);
+
+        const q = new Quill(editor, {
+            theme: "bubble",
+            modules: {
+                cursors: true,
+                toolbar: [
+                    [{ font: ["sans-serif", "serif", "monospace"] }],
+                    [{ size: ["small", false, "large", "huge"] }],
+                    ["bold", "italic", "underline", "strike"],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    ["blockquote", "code-block"],
+                    ["clean"]
+                ]
+            }
+        });
+
+        setQuill(q);
+    }, []);
 
     useEffect(() => {
+        if (quill == null) {
+            return;
+        }
+
         const ydoc = new Y.Doc();
-        const provider = new WebsocketProvider(config.socketUrl, "rumi-collab-doc", ydoc);
+        const provider = new WebsocketProvider(config.socketUrl, documentName, ydoc);
+        setProvider(provider);
         const ytext = ydoc.getText("quill");
 
-        if (quillRef.current) {
-            const quill = new Quill(quillRef.current, {
-                theme: "bubble",
-                modules: {
-                    cursors: true
-                }
-            });
+        const binding = new QuillBinding(ytext, quill, provider.awareness);
 
-            new QuillBinding(ytext, quill, provider.awareness);
+        provider.awareness.setLocalStateField("user", {
+            name: userName,
+            color: randomHexColor()
+        });
 
-            provider.awareness.setLocalStateField("user", {
-                name: userName || "Anonymous"
-            });
+        quill.enable();
 
-            return () => {
-                provider.disconnect();
-            };
-        }
-    }, [userName]);
+        return () => {
+            binding.destroy();
+            provider.disconnect();
+            ydoc.destroy();
+        };
+    }, [documentName, quill, setProvider, userName]);
 
-    return <EditorContainer ref={quillRef} />;
+    return <EditorContainer ref={wrapperRef} />;
 };
 
 export default RumiEditor;

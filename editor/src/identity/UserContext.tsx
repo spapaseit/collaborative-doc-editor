@@ -3,19 +3,24 @@ import React, { createContext, useContext, useState, ReactNode, useMemo } from "
 interface IUserContext {
     userName: string;
     setUserName: (name: string) => void;
+    documentName: string;
+    setDocumentName: (name: string) => void;
 }
 
 const UserContext = createContext<IUserContext | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [userName, setUserName] = useState<string>("");
+    const [documentName, setDocumentName] = useState<string>("");
 
     const value = useMemo(
         () => ({
             userName,
-            setUserName
+            setUserName,
+            documentName,
+            setDocumentName
         }),
-        [userName]
+        [userName, documentName]
     );
 
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
