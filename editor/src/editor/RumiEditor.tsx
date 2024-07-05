@@ -10,7 +10,7 @@ import config from "../config";
 import { randomHexColor } from "../utils/color-utils";
 import { useUrlParams } from "../hooks";
 import { FaUndo, FaRedo } from "react-icons/fa";
-import { Button, EditorContainer, Toolbar } from "./EditorStyles";
+import { Button, EditorContainer, Toolbar } from "./styles";
 import { autoSave } from "../api/api-hooks";
 import { SAVE_INTERVAL } from "../types";
 import { useQuill } from "./QuillContext";

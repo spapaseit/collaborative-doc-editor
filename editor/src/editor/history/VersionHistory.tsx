@@ -1,43 +1,10 @@
 import React from "react";
-import styled from "styled-components";
 import Quill from "quill";
-import { useFetchVersions } from "../api/api-hooks";
+import { useFetchVersions } from "../../api/api-hooks";
 import Delta from "quill-delta";
-import { useUrlParams } from "../hooks";
-
-const Container = styled.div`
-    padding: 20px;
-    background: #f4f4f4;
-    border-radius: 50px;
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    width: 15vw;
-`;
-
-const VersionList = styled.ul`
-    list-style: none;
-    padding: 0;
-`;
-
-const VersionItem = styled.li`
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-`;
-
-const Button = styled.button`
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 3px;
-
-    &:hover {
-        background-color: #0056b3;
-    }
-`;
+import { useUrlParams } from "../../hooks";
+import { FaHistory } from "react-icons/fa";
+import { Button, Container, VersionItem, VersionList } from "./styles";
 
 interface VersionHistoryProps {
     quill: Quill | null;
@@ -63,12 +30,14 @@ const VersionHistory: React.FC<VersionHistoryProps> = ({ quill }) => {
 
     return (
         <Container>
-            <h3>Version History</h3>
+            <h4>Version History</h4>
             <VersionList>
                 {versions.map((version: any) => (
                     <VersionItem key={version.version}>
                         <span>Version {version.version}</span>
-                        <Button onClick={() => handleRevert(version.content)}>Revert</Button>
+                        <Button onClick={() => handleRevert(version.content)} title="Revert ot this version">
+                            <FaHistory />
+                        </Button>
                     </VersionItem>
                 ))}
             </VersionList>

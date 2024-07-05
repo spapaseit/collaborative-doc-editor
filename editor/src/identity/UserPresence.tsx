@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { WebsocketProvider } from "y-websocket";
-import { PresenceContainer, UserItem, UserList, WhoAmI } from "./IdentityStyles";
+import { PresenceContainer, UserItem, UserList, WhoAmI } from "./styles";
 import { useUrlParams } from "../hooks";
 
 interface Props {

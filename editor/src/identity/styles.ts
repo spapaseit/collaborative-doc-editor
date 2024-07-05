@@ -8,7 +8,6 @@ export const PresenceContainer = styled.div`
     top: 100px;
     left: 20px;
     width: 15vw;
-    //background: #eee;
     background: rgba(0, 0, 0, 0.02);
 `;
 
@@ -21,15 +20,13 @@ export const UserItem = styled.li`
     margin: 5px 0;
     padding: 10px;
     background: #fafafa;
-
-    //border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
     border-radius: 5px;
 `;
 
 export const WhoAmI = styled.span`
     color: #bbb;
     font-size: 0.7em;
-    //float: right;
     margin-left: 5px;
-    vertical-align: middle;
 `;
