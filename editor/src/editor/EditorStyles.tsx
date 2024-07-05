@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 
 export const EditorContainer = styled.div`
-    height: 90%;
+    height: 100%;
     border: none;
     .ql-editor {
         height: 100%;

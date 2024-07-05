@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Quill from "quill";
 import { useFetchVersions } from "../api/api-hooks";
 import Delta from "quill-delta";
+import { useUrlParams } from "../hooks";
 
 const Container = styled.div`
     padding: 20px;
@@ -39,11 +40,11 @@ const Button = styled.button`
 `;
 
 interface VersionHistoryProps {
-    documentName: string;
-    quill: Quill | undefined;
+    quill: Quill | null;
 }
 
-const VersionHistory: React.FC<VersionHistoryProps> = ({ documentName, quill }) => {
+const VersionHistory: React.FC<VersionHistoryProps> = ({ quill }) => {
+    const { documentName } = useUrlParams();
     const { data: versions, isPending, isError } = useFetchVersions(documentName);
 
     const handleRevert = (content: Delta) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { WebsocketProvider } from "y-websocket";
 import { PresenceContainer, UserItem, UserList, WhoAmI } from "./IdentityStyles";
 import { useUrlParams } from "../hooks";
@@ -13,7 +13,7 @@ interface ICollaborator {
     color: string;
 }
 
-const UserPresence: React.FC<Props> = ({ provider }) => {
+const UserPresence = React.memo(({ provider }: Props) => {
     const [users, setUsers] = useState<ICollaborator[]>([]);
     const { userName } = useUrlParams();
 
@@ -61,6 +61,6 @@ const UserPresence: React.FC<Props> = ({ provider }) => {
             </UserList>
         </PresenceContainer>
     );
-};
+});
 
 export default UserPresence;

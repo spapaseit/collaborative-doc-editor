@@ -1,11 +1,12 @@
 import React, { Suspense, useState } from "react";
-import { RumiEditor, DocumentTitle } from "./editor";
+import { RumiEditor, DocumentTitle, VersionHistory } from "./editor";
 import { AppContainer, DocumentContainer } from "./AppStyles";
 import { UserPresence } from "./identity";
 import { WebsocketProvider } from "y-websocket";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { JoinDocument } from "./landing";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Quill from "quill";
 
 const queryClient = new QueryClient();
 
@@ -16,6 +17,7 @@ const queryClient = new QueryClient();
 
 const App: React.FC = () => {
     const [provider, setProvider] = useState<WebsocketProvider | null>(null);
+    const [quill, setQuill] = useState<Quill | null>(null);
 
     return (
         <QueryClientProvider client={queryClient}>
@@ -29,8 +31,9 @@ const App: React.FC = () => {
                                     <UserPresence provider={provider} />
                                     <DocumentTitle />
                                     <DocumentContainer>
-                                        <RumiEditor setProvider={setProvider} />
+                                        <RumiEditor setProvider={setProvider} setQuill={setQuill} />
                                     </DocumentContainer>
+                                    <VersionHistory quill={quill} />
                                 </AppContainer>
                             }
                         />

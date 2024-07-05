@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Quill from "quill";
 import * as Y from "yjs";
 import { UndoManager } from "yjs";
@@ -13,60 +13,27 @@ import { FaUndo, FaRedo } from "react-icons/fa";
 import { Button, EditorContainer, Toolbar } from "./EditorStyles";
 import { autoSave } from "../api/api-hooks";
 import { SAVE_INTERVAL } from "../types";
-import VersionHistory from "./VersionHistory";
 
 Quill.register("modules/cursors", QuillCursors);
 
 interface Props {
     setProvider: (provider: WebsocketProvider | null) => void;
+    setQuill: (quill: Quill | null) => void;
 }
 
-const RumiEditor: React.FC<Props> = ({ setProvider }) => {
-    const [quill, setQuill] = useState<Quill>();
+const RumiEditor: React.FC<Props> = ({ setProvider, setQuill }) => {
+    const [quillInstance, setQuillInstance] = useState<Quill | null>();
     const { documentName, userName } = useUrlParams();
     const [undoManager, setUndoManager] = useState<UndoManager | null>(null);
-    const [lastSavedContent, setLastSavedContent] = useState<string>("");
+    const lastSavedContent = useRef<string>("");
 
-    // Makes surre Quill is only initialised once, instead of evey time a new user joins
-    const wrapperRef = useCallback((wrapper: HTMLDivElement | null) => {
-        if (wrapper == null) {
-            return;
-        }
-
-        wrapper.innerHTML = "";
-        const editor = document.createElement("div");
-        wrapper.append(editor);
-
-        const q = new Quill(editor, {
-            theme: "bubble",
-            modules: {
-                cursors: true,
-                toolbar: [
-                    [{ font: ["sans-serif", "serif", "monospace"] }],
-                    [{ size: ["small", false, "large", "huge"] }],
-                    ["bold", "italic", "underline", "strike"],
-                    [{ list: "ordered" }, { list: "bullet" }],
-                    ["blockquote", "code-block"],
-                    ["undo", "redo"],
-                    ["clean"]
-                ]
-            }
-        });
-
-        setQuill(q);
-    }, []);
-
-    useEffect(() => {
-        if (quill == null) {
-            return;
-        }
-
+    const setUp = useCallback((): { provider: WebsocketProvider; binding: QuillBinding; ydoc: Y.Doc } => {
         const ydoc = new Y.Doc();
         const provider = new WebsocketProvider(config.socketUrl, documentName, ydoc);
         setProvider(provider);
         const ytext = ydoc.getText("quill");
 
-        const binding = new QuillBinding(ytext, quill, provider.awareness);
+        const binding = new QuillBinding(ytext, quillInstance, provider.awareness);
 
         const undoManager = new UndoManager(ytext, { trackedOrigins: new Set([binding]) });
         setUndoManager(undoManager);
@@ -76,17 +43,27 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
             color: randomHexColor()
         });
 
-        quill.enable();
+        return { provider, binding, ydoc };
+    }, [documentName, quillInstance, setProvider, userName]);
+
+    useEffect(() => {
+        if (quillInstance == null) {
+            return;
+        }
+
+        const { provider, binding, ydoc } = setUp();
+
+        quillInstance.enable();
 
         // Autosave interval
         const autosaveInterval = setInterval(() => {
-            const content = quill.getContents();
+            const content = quillInstance.getContents();
 
             const currentContent = JSON.stringify(content);
 
-            if (currentContent !== lastSavedContent) {
+            if (currentContent !== lastSavedContent.current) {
                 autoSave(documentName, content);
-                setLastSavedContent(currentContent);
+                lastSavedContent.current = currentContent;
             }
         }, SAVE_INTERVAL);
 
@@ -97,7 +74,7 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
             ydoc.destroy();
             setProvider(null);
         };
-    }, [documentName, quill, setProvider, userName, lastSavedContent]);
+    }, [documentName, quillInstance, setProvider, userName, setUp]);
 
     const handleUndo = () => {
         if (undoManager) {
@@ -111,6 +88,39 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
         }
     };
 
+    // Makes sure Quill is only initialised once, instead of evey time a new user joins
+    const wrapperRef = useCallback(
+        (wrapper: HTMLDivElement | null) => {
+            if (wrapper == null) {
+                return;
+            }
+
+            wrapper.innerHTML = "";
+            const editor = document.createElement("div");
+            wrapper.append(editor);
+
+            const q = new Quill(editor, {
+                theme: "bubble",
+                modules: {
+                    cursors: true,
+                    toolbar: [
+                        [{ font: ["sans-serif", "serif", "monospace"] }],
+                        [{ size: ["small", false, "large", "huge"] }],
+                        ["bold", "italic", "underline", "strike"],
+                        [{ list: "ordered" }, { list: "bullet" }],
+                        ["blockquote", "code-block"],
+                        ["undo", "redo"],
+                        ["clean"]
+                    ]
+                }
+            });
+
+            setQuill(q);
+            setQuillInstance(q);
+        },
+        [setQuill]
+    );
+
     return (
         <>
             <Toolbar>
@@ -122,7 +132,6 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
                 </Button>
             </Toolbar>
             <EditorContainer ref={wrapperRef} />
-            <VersionHistory documentName={documentName} quill={quill} />
         </>
     );
 };

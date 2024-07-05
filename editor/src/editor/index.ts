@@ -1,3 +1,4 @@
 import RumiEditor from "./RumiEditor";
 import DocumentTitle from "./DocumentTitle";
-export { RumiEditor, DocumentTitle };
+import VersionHistory from "./VersionHistory";
+export { RumiEditor, DocumentTitle, VersionHistory };
