@@ -1,2 +1,3 @@
 import RumiEditor from "./RumiEditor";
-export { RumiEditor };
+import DocumentTitle from "./DocumentTitle";
+export { RumiEditor, DocumentTitle };

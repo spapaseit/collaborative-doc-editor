@@ -11,6 +11,6 @@
             "y-websocket/bin/utils": ["node_modules/y-websocket/dist/bin/utils.d.cts"]
         }
     },
-    "include": ["server.ts", "types.d.ts"],
+    "include": ["server.ts", "db-server.ts", "types.d.ts"],
     "exclude": ["node_modules"]
 }

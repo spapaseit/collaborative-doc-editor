@@ -1,19 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Container, FormContainer, Input, Title } from "./landing-styles";
-//import { useUser } from "../identity";
+import { Button, Container, FormContainer, Input, Title } from "./LandingStyles";
 
 const JoinDocument: React.FC = () => {
-    //const { setUserName, setDocumentName } = useUser();
     const [userName, setUserNameInput] = useState("");
     const [documentName, setDocumentNameInput] = useState("");
     const navigate = useNavigate();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-
-        // setUserName(userName);
-        // setDocumentName(documentName);
 
         navigate(`/editor?documentName=${documentName}&userName=${userName}`);
     };

@@ -1,19 +1,24 @@
-import React, { Suspense, lazy, useState } from "react";
-import { UserProvider } from "./identity";
-import { RumiEditor } from "./editor";
+import React, { Suspense, useState } from "react";
+import { RumiEditor, DocumentTitle } from "./editor";
 import { AppContainer, DocumentContainer } from "./AppStyles";
 import { UserPresence } from "./identity";
 import { WebsocketProvider } from "y-websocket";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import DocumentTitle from "./editor/DocumentTitle";
+import { JoinDocument } from "./landing";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const JoinDocument = lazy(() => import("./landing/JoinDocument"));
+const queryClient = new QueryClient();
+
+// For whenever this grows to be a Google Docs competitor
+// const JoinDocument = lazy(() => import("./landing/JoinDocument"));
+// const UserPresence = lazy(() => import("./identity/UserPresence"));
+// const RumiEditor = lazy(() => import("./editor/RumiEditor"));
 
 const App: React.FC = () => {
     const [provider, setProvider] = useState<WebsocketProvider | null>(null);
 
     return (
-        <UserProvider>
+        <QueryClientProvider client={queryClient}>
             <Router>
                 <Suspense fallback={<div>Loading...</div>}>
                     <Routes>
@@ -33,7 +38,7 @@ const App: React.FC = () => {
                     </Routes>
                 </Suspense>
             </Router>
-        </UserProvider>
+        </QueryClientProvider>
     );
 };
 

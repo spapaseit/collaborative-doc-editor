@@ -1,0 +1,2 @@
+export const SAVE_INTERVAL = 5000;
+export const FETCH_VERSION_HISTORY_INTERVAL = 8000;

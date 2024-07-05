@@ -1,39 +1,21 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Quill from "quill";
 import * as Y from "yjs";
+import { UndoManager } from "yjs";
 import { QuillBinding } from "y-quill";
 import { WebsocketProvider } from "y-websocket";
 import QuillCursors from "quill-cursors";
 import "quill/dist/quill.bubble.css";
 import config from "../config";
-import { styled } from "styled-components";
 import { randomHexColor } from "../utils/color-utils";
-import { useLocation } from "react-router-dom";
 import { useUrlParams } from "../hooks";
+import { FaUndo, FaRedo } from "react-icons/fa";
+import { Button, EditorContainer, Toolbar } from "./EditorStyles";
+import { autoSave } from "../api/api-hooks";
+import { SAVE_INTERVAL } from "../types";
+import VersionHistory from "./VersionHistory";
 
 Quill.register("modules/cursors", QuillCursors);
-
-const EditorContainer = styled.div`
-    height: 90%;
-    border: none;
-    .ql-editor {
-        height: 100%;
-        overflow-y: auto;
-        border: none;
-    }
-
-    .ql-container {
-        overflow: visible;
-        // font-family: Georgia, serif;
-        // font-size: 16px;
-
-        .ql-snow {
-            border: none;
-            display: flex;
-            justify-content: center;
-        }
-    }
-`;
 
 interface Props {
     setProvider: (provider: WebsocketProvider | null) => void;
@@ -41,15 +23,14 @@ interface Props {
 
 const RumiEditor: React.FC<Props> = ({ setProvider }) => {
     const [quill, setQuill] = useState<Quill>();
-    // const location = useLocation();
-    // const params = new URLSearchParams(location.search);
-    // const userName = params.get("userName") || "Anonymous";
-    // const documentName = params.get("documentName") || "default-room";
-
     const { documentName, userName } = useUrlParams();
+    const [undoManager, setUndoManager] = useState<UndoManager | null>(null);
 
+    // Makes surre Quill is only initialised once, instead of evey time a new user joins
     const wrapperRef = useCallback((wrapper: HTMLDivElement | null) => {
-        if (wrapper == null) return;
+        if (wrapper == null) {
+            return;
+        }
 
         wrapper.innerHTML = "";
         const editor = document.createElement("div");
@@ -65,6 +46,7 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
                     ["bold", "italic", "underline", "strike"],
                     [{ list: "ordered" }, { list: "bullet" }],
                     ["blockquote", "code-block"],
+                    ["undo", "redo"],
                     ["clean"]
                 ]
             }
@@ -85,6 +67,9 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
 
         const binding = new QuillBinding(ytext, quill, provider.awareness);
 
+        const undoManager = new UndoManager(ytext, { trackedOrigins: new Set([binding]) });
+        setUndoManager(undoManager);
+
         provider.awareness.setLocalStateField("user", {
             name: userName,
             color: randomHexColor()
@@ -92,14 +77,46 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
 
         quill.enable();
 
+        // Autosave interval
+        const autosaveInterval = setInterval(() => {
+            const content = quill.getContents();
+            autoSave(documentName, content);
+        }, SAVE_INTERVAL);
+
         return () => {
+            clearInterval(autosaveInterval);
             binding.destroy();
             provider.disconnect();
             ydoc.destroy();
         };
     }, [documentName, quill, setProvider, userName]);
 
-    return <EditorContainer ref={wrapperRef} />;
+    const handleUndo = () => {
+        if (undoManager) {
+            undoManager.undo();
+        }
+    };
+
+    const handleRedo = () => {
+        if (undoManager) {
+            undoManager.redo();
+        }
+    };
+
+    return (
+        <>
+            <Toolbar>
+                <Button onClick={handleUndo}>
+                    <FaUndo /> Undo
+                </Button>
+                <Button onClick={handleRedo}>
+                    <FaRedo /> Redo
+                </Button>
+            </Toolbar>
+            <EditorContainer ref={wrapperRef} />
+            <VersionHistory documentName={documentName} quill={quill} />
+        </>
+    );
 };
 
 export default RumiEditor;
