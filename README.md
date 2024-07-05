@@ -8,6 +8,10 @@ The project consists of a client app and two small servers:
 -   [server/db-server.ts](./server/db-server.ts): handles api call to persist the document versions history.
 -   [editor/](./editor/src/App.tsx): React + TypeScript project consuming both servers.
 
+## Installing dependencies
+
+Run `npm install` on both the `editor/` and `server/` folders.
+
 ## Running the project
 
 In order to test the collaborative element from your machine, you will need 3 terminals: one for the servers and the others to launch two instances of the front-end.
