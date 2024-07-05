@@ -25,6 +25,7 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
     const [quill, setQuill] = useState<Quill>();
     const { documentName, userName } = useUrlParams();
     const [undoManager, setUndoManager] = useState<UndoManager | null>(null);
+    const [lastSavedContent, setLastSavedContent] = useState<string>("");
 
     // Makes surre Quill is only initialised once, instead of evey time a new user joins
     const wrapperRef = useCallback((wrapper: HTMLDivElement | null) => {
@@ -80,7 +81,13 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
         // Autosave interval
         const autosaveInterval = setInterval(() => {
             const content = quill.getContents();
-            autoSave(documentName, content);
+
+            const currentContent = JSON.stringify(content);
+
+            if (currentContent !== lastSavedContent) {
+                autoSave(documentName, content);
+                setLastSavedContent(currentContent);
+            }
         }, SAVE_INTERVAL);
 
         return () => {
@@ -88,8 +95,9 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
             binding.destroy();
             provider.disconnect();
             ydoc.destroy();
+            setProvider(null);
         };
-    }, [documentName, quill, setProvider, userName]);
+    }, [documentName, quill, setProvider, userName, lastSavedContent]);
 
     const handleUndo = () => {
         if (undoManager) {

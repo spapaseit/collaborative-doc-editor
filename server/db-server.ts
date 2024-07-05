@@ -56,7 +56,15 @@ app.post("/saveVersion", (req: Request<{}, any, { documentName: string; content:
                 return;
             }
 
-            res.status(200).send("Version saved");
+            // Delete older versions if there are more than 15
+            db.run(`DELETE FROM Versions WHERE id IN (SELECT id FROM Versions WHERE documentName = ? ORDER BY version DESC LIMIT -1 OFFSET 15)`, [documentName], function (err) {
+                if (err) {
+                    res.status(500).send("Error deleting old versions");
+                    return;
+                }
+
+                res.status(200).send("Version saved");
+            });
         });
     });
 });
