@@ -110,7 +110,6 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
                         ["bold", "italic", "underline", "strike"],
                         [{ list: "ordered" }, { list: "bullet" }],
                         ["blockquote", "code-block"],
-                        ["undo", "redo"],
                         ["clean"]
                     ]
                 }

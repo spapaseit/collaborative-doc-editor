@@ -1,4 +1,4 @@
-import { screen, render, waitFor } from "@testing-library/react";
+import { screen, render, waitFor, cleanup } from "@testing-library/react";
 import { dbclient } from "../../api/db-client";
 import RumiEditor from "../RumiEditor";
 import { IQuillContext, QuillProvider } from "../QuillContext";
@@ -22,6 +22,12 @@ jest.mock("../../types/constants.ts", () => ({
 }));
 
 describe("RumiEditor", () => {
+    afterEach(() => {
+        cleanup();
+        jest.clearAllTimers();
+        jest.restoreAllMocks();
+    });
+
     it("should autosave content periodically", async () => {
         const mockSetProvider = jest.fn();
 
