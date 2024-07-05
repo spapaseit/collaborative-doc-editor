@@ -1,5 +1,5 @@
 import React, { Suspense, useState } from "react";
-import { RumiEditor, DocumentTitle, VersionHistory } from "./editor";
+import { RumiEditor, DocumentTitle, VersionHistory, QuillProvider } from "./editor";
 import { AppContainer, DocumentContainer } from "./AppStyles";
 import { UserPresence } from "./identity";
 import { WebsocketProvider } from "y-websocket";
@@ -31,7 +31,9 @@ const App: React.FC = () => {
                                     <UserPresence provider={provider} />
                                     <DocumentTitle />
                                     <DocumentContainer>
-                                        <RumiEditor setProvider={setProvider} setQuill={setQuill} />
+                                        <QuillProvider context={{ quillInstance: quill, setQuillInstance: setQuill }}>
+                                            <RumiEditor setProvider={setProvider} />
+                                        </QuillProvider>
                                     </DocumentContainer>
                                     <VersionHistory quill={quill} />
                                 </AppContainer>

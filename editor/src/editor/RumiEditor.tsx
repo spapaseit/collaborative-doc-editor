@@ -13,16 +13,17 @@ import { FaUndo, FaRedo } from "react-icons/fa";
 import { Button, EditorContainer, Toolbar } from "./EditorStyles";
 import { autoSave } from "../api/api-hooks";
 import { SAVE_INTERVAL } from "../types";
+import { useQuill } from "./QuillContext";
 
 Quill.register("modules/cursors", QuillCursors);
 
 interface Props {
     setProvider: (provider: WebsocketProvider | null) => void;
-    setQuill: (quill: Quill | null) => void;
+    //setQuill: (quill: Quill | null) => void;
 }
 
-const RumiEditor: React.FC<Props> = ({ setProvider, setQuill }) => {
-    const [quillInstance, setQuillInstance] = useState<Quill | null>();
+const RumiEditor: React.FC<Props> = ({ setProvider }) => {
+    const { quillInstance, setQuillInstance } = useQuill();
     const { documentName, userName } = useUrlParams();
     const [undoManager, setUndoManager] = useState<UndoManager | null>(null);
     const lastSavedContent = useRef<string>("");
@@ -115,10 +116,10 @@ const RumiEditor: React.FC<Props> = ({ setProvider, setQuill }) => {
                 }
             });
 
-            setQuill(q);
+            //setQuill(q);
             setQuillInstance(q);
         },
-        [setQuill]
+        [setQuillInstance]
     );
 
     return (
