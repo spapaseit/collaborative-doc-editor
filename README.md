@@ -1,4 +1,4 @@
-# Real-time Collaborative Document Editor [Senior] - Rumi Technical Test for Sergi Papaseit
+# Real-time Collaborative Document Editor
 
 ## Project layout
 
