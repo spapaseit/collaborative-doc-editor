@@ -38,13 +38,40 @@ docker-compose up --build
 This will start both the WebSockets server (`locahost:4000`) and the database api (`localhost:5000`), as well as two instances of the front-end, one on `:3000` and the other on `:3001`.
 Open two tabs on a browser and navigate to `http://localhost:3000` on one, and `http://localhost:3001` on the other.
 
-## Collaborating
+## Usage
+
+### Collaborating
 
 With two instances of the app running, just type in the same document name on both instances to work on the same document.
 
 ![alt text](assets/image.png)
 
 You can leave the document and join a different one just going back to the initial page and typing in a different document name. If you do the same on the other instance off the app, you'll start collaborating on this new document. You can go back and forth between documents.
+
+### Formatting text
+
+In order to add formatting, select the text you want formatted and a bubble will appear wit the available formatting options.
+
+## Packages used
+
+### Front-end
+
+-   [Quill.js](https://quilljs.com/)
+-   [Yjs](https://github.com/yjs/yjs)
+-   [Styled Components](https://styled-components.com/)
+-   [React-Query](https://tanstack.com/query/v3)
+-   [axios](https://github.com/axios/axios)
+
+### Back-end
+
+-   [Yjs](https://github.com/yjs/yjs)
+-   [y-websocket](https://github.com/yjs/y-websocket)
+-   [Express](https://expressjs.com/)
+-   [sqlite3](https://github.com/TryGhost/node-sqlite3)
+
+## Autosave & Version History
+
+Changes are saved automatically every 15 seconds (configured in [constants.ts](editor/src/types/constants.ts)). The interval has been chosen as halfway between saving too often and waiting too long in order to see the Version History feature work.
 
 ## Tests
 
