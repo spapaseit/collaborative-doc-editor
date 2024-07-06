@@ -20,7 +20,7 @@ In order to test the collaborative element from your machine, you will need 3 te
 
 #### Starting the servers
 
-Open a terminal into the `server/` folder and run `npm start`. This will start both the WebSockets (`locahost:4000`) and the database api (`localhost:5000`).
+Open a terminal into the `server/` folder and run `npm start`. This will start both the WebSockets server (`locahost:4000`) and the database api (`localhost:5000`).
 
 #### Launching two instances of the front-end
 
@@ -35,7 +35,7 @@ Make sure you have Docker running on your machine. Open a terminal into the root
 docker-compose up --build
 ```
 
-This will start the two servers on the same ports as above, as well as two instances of the front-end, one on `:3000` and the other on `:3001`.
+This will start both the WebSockets server (`locahost:4000`) and the database api (`localhost:5000`), as well as two instances of the front-end, one on `:3000` and the other on `:3001`.
 Open two tabs on a browser and navigate to `http://localhost:3000` on one, and `http://localhost:3001` on the other.
 
 ## Collaborating
