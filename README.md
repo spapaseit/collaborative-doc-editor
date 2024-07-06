@@ -51,3 +51,7 @@ You can leave the document and join a different one just going back to the initi
 There are two unit tests for the [RumiEditor.tsx](editor/src/editor/RumiEditor.tsx) component, both in [RumiEditor.test.tsx](editor/src/editor/__tests__/RumiEditor.test.tsx).
 
 To run the tests, open a terminal into the `editor/` directory and run `npm test`.
+
+## Closing comments
+
+I am no designer, and it shows :D
