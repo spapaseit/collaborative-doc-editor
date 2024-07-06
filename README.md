@@ -54,4 +54,4 @@ To run the tests, open a terminal into the `editor/` directory and run `npm test
 
 ## Closing comments
 
-I am no designer, and it shows :D
+I am no designer, and it shows :)
