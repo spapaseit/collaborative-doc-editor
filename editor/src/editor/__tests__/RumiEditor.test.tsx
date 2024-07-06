@@ -34,6 +34,7 @@ describe("RumiEditor", () => {
         // Mock Quill editor instance
         const mockQuill = {
             getContents: jest.fn().mockReturnValue("mocked content"),
+            getText: jest.fn().mockReturnValue("mocked content"),
             getModule: jest.fn(),
             setContents: jest.fn(),
             enable: jest.fn(),

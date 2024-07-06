@@ -26,7 +26,8 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
     const { quillInstance, setQuillInstance } = useQuill();
     const { documentName, userName } = useUrlParams();
     const [undoManager, setUndoManager] = useState<UndoManager | null>(null);
-    const lastSavedContent = useRef<string>("");
+    // TODO: Initialize with most recent version
+    const lastSavedContent = useRef<string>("\n");
 
     const setUp = useCallback((): { provider: WebsocketProvider; binding: QuillBinding; ydoc: Y.Doc } => {
         const ydoc = new Y.Doc();
@@ -59,12 +60,11 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
         // Autosave interval
         const autosaveInterval = setInterval(() => {
             const content = quillInstance.getContents();
+            const text = quillInstance.getText();
 
-            const currentContent = JSON.stringify(content);
-
-            if (currentContent !== lastSavedContent.current) {
+            if (text !== lastSavedContent.current) {
                 autoSave(documentName, content);
-                lastSavedContent.current = currentContent;
+                lastSavedContent.current = text;
             }
         }, SAVE_INTERVAL);
 
