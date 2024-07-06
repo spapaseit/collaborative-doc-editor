@@ -29,22 +29,22 @@ Open a terminal into the `server/` folder and run `npm start`. This will start b
 
 ### Option 2: Docker Compose
 
-Make sure you have Docker runnin on your machine. Open a terminal into theroot of the project and run
+Make sure you have Docker running on your machine. Open a terminal into the root of the project and run
 
 ```
 docker-compose up --build
 ```
 
 This will start the two servers on the same ports as above, as well as two instances of the front-end, one on `:3000` and the other on `:3001`.
-Open two tabs on a browser and navigate to `http://localhost:3000` on one and `http://localhost:3001` on the other.
+Open two tabs on a browser and navigate to `http://localhost:3000` on one, and `http://localhost:3001` on the other.
 
-### Collaborating
+## Collaborating
 
 With two instances of the app running, just type in the same document name on both instances to work on the same document.
 
 ![alt text](assets/image.png)
 
-You can leave the document and join a different one just going back to the initial pahge and typing in a different document name. If you do the same on the other instance off the app, you'll start collaborating on this new document. You can go back and forth between documents.
+You can leave the document and join a different one just going back to the initial page and typing in a different document name. If you do the same on the other instance off the app, you'll start collaborating on this new document. You can go back and forth between documents.
 
 ## Tests
 
