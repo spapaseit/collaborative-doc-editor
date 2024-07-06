@@ -1,0 +1,26 @@
+services:
+    frontend1:
+        build:
+            context: ./editor
+        ports:
+            - "3000:3000"
+        depends_on:
+            - backend
+
+    frontend2:
+        build:
+            context: ./editor
+        ports:
+            - "3001:3000" # Host port 3001 mapped to container port 3000
+        depends_on:
+            - backend
+
+    backend:
+        build:
+            context: ./server
+        ports:
+            - "4000:4000"
+            - "5000:5000"
+        volumes:
+            - ./server/data:/usr/src/app/data
+        command: ["npm", "start"]
