@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Container, FormContainer, Input, Title } from "./LandingStyles";
+import { Button, Container, FormContainer, Input, Title } from "./styles";
 
 const JoinDocument: React.FC = () => {
     const [userName, setUserNameInput] = useState("");

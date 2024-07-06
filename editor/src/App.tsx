@@ -1,6 +1,6 @@
 import React, { Suspense, useState } from "react";
 import { RumiEditor, DocumentTitle, VersionHistory, QuillProvider } from "./editor";
-import { AppContainer, DocumentContainer } from "./AppStyles";
+import { AppContainer, DocumentContainer } from "./app-styles";
 import { UserPresence } from "./identity";
 import { WebsocketProvider } from "y-websocket";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
