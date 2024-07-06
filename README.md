@@ -50,7 +50,7 @@ You can leave the document and join a different one just going back to the initi
 
 ### Formatting text
 
-In order to add formatting, select the text you want formatted and a bubble will appear wit the available formatting options.
+In order to add formatting, select the text you want formatted and a bubble will appear with the available formatting options.
 
 ## Packages used
 
