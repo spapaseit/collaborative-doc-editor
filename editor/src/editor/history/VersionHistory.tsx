@@ -35,7 +35,7 @@ const VersionHistory: React.FC<VersionHistoryProps> = ({ quill }) => {
                 {versions.map((version: any) => (
                     <VersionItem key={version.version}>
                         <span>Version {version.version}</span>
-                        <Button onClick={() => handleRevert(version.content)} title="Revert ot this version">
+                        <Button onClick={() => handleRevert(version.content)} title="Revert to this version">
                             <FaHistory />
                         </Button>
                     </VersionItem>
