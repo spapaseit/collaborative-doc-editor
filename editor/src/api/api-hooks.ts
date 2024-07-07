@@ -2,7 +2,7 @@ import { FETCH_VERSION_HISTORY_INTERVAL, VersionRow } from "./../types";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { dbclient } from "./db-client";
 import Delta from "quill-delta";
-import { IRow } from "../types/version-row";
+import { IRow } from "../types";
 
 export const useFetchVersions = (documentName: string): UseQueryResult<VersionRow[], Error> => {
     return useQuery({
