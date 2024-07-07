@@ -16,7 +16,10 @@ Run `npm install` on both the `editor/` and `server/` folders.
 
 ### Option 1: "Manually"
 
-In order to test the collaborative element from your machine, you will need 3 terminals: one for the servers and the others to launch two instances of the front-end.
+In order to test the collaborative element from your machine, you will need:
+
+-  Node >= v20.x
+-  3 terminals: one for the servers and the others to launch two instances of the front-end.
 
 #### Starting the servers
 
