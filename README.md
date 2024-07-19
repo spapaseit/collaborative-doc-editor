@@ -18,8 +18,8 @@ Run `npm install` on both the `editor/` and `server/` folders.
 
 In order to test the collaborative element from your machine, you will need:
 
--  Node >= v20.x
--  3 terminals: one for the servers and the others to launch two instances of the front-end.
+-   Node >= v20.x
+-   3 terminals: one for the servers and the others to launch two instances of the front-end.
 
 #### Starting the servers
 
@@ -78,7 +78,7 @@ Changes are saved automatically every 15 seconds (configured in [constants.ts](e
 
 ## Tests
 
-There are two unit tests for the [RumiEditor.tsx](editor/src/editor/RumiEditor.tsx) component, both in [RumiEditor.test.tsx](editor/src/editor/__tests__/RumiEditor.test.tsx).
+There are two unit tests for the [TextEditor.tsx](editor/src/editor/TextEditor.tsx) component, both in [TextEditor.test.tsx](editor/src/editor/__tests__/TextEditor.test.tsx).
 
 To run the tests, open a terminal into the `editor/` directory and run `npm test`.
 

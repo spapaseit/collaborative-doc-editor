@@ -22,7 +22,7 @@ interface Props {
     //setQuill: (quill: Quill | null) => void;
 }
 
-const RumiEditor: React.FC<Props> = ({ setProvider }) => {
+const TextEditor: React.FC<Props> = ({ setProvider }) => {
     const { quillInstance, setQuillInstance } = useQuill();
     const { documentName, userName } = useUrlParams();
     const [undoManager, setUndoManager] = useState<UndoManager | null>(null);
@@ -136,4 +136,4 @@ const RumiEditor: React.FC<Props> = ({ setProvider }) => {
     );
 };
 
-export default RumiEditor;
+export default TextEditor;

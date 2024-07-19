@@ -1,6 +1,6 @@
 import { screen, render, waitFor, cleanup } from "@testing-library/react";
 import { dbclient } from "../../api/db-client";
-import RumiEditor from "../RumiEditor";
+import TextEditor from "../TextEditor";
 import { IQuillContext, QuillProvider } from "../QuillContext";
 import * as Y from "yjs";
 
@@ -21,7 +21,7 @@ jest.mock("../../types/constants.ts", () => ({
     SAVE_INTERVAL: 500
 }));
 
-describe("RumiEditor", () => {
+describe("TextEditor", () => {
     afterEach(() => {
         cleanup();
         jest.clearAllTimers();
@@ -49,7 +49,7 @@ describe("RumiEditor", () => {
 
         render(
             <QuillProvider context={mockContextValue}>
-                <RumiEditor setProvider={mockSetProvider} />
+                <TextEditor setProvider={mockSetProvider} />
             </QuillProvider>
         );
 
@@ -93,7 +93,7 @@ describe("RumiEditor", () => {
 
         render(
             <QuillProvider context={mockContextValue}>
-                <RumiEditor setProvider={mockSetProvider} />
+                <TextEditor setProvider={mockSetProvider} />
             </QuillProvider>
         );
 

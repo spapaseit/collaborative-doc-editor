@@ -1,5 +1,5 @@
 import React, { Suspense, useState } from "react";
-import { RumiEditor, DocumentTitle, VersionHistory, QuillProvider } from "./editor";
+import { TextEditor, DocumentTitle, VersionHistory, QuillProvider } from "./editor";
 import { AppContainer, DocumentContainer } from "./app-styles";
 import { UserPresence } from "./identity";
 import { WebsocketProvider } from "y-websocket";
@@ -13,7 +13,7 @@ const queryClient = new QueryClient();
 // For whenever this grows to be a Google Docs competitor
 // const JoinDocument = lazy(() => import("./landing/JoinDocument"));
 // const UserPresence = lazy(() => import("./identity/UserPresence"));
-// const RumiEditor = lazy(() => import("./editor/RumiEditor"));
+// const TextEditor = lazy(() => import("./editor/TextEditor"));
 
 const App: React.FC = () => {
     const [provider, setProvider] = useState<WebsocketProvider | null>(null);
@@ -32,7 +32,7 @@ const App: React.FC = () => {
                                     <DocumentTitle />
                                     <DocumentContainer>
                                         <QuillProvider context={{ quillInstance: quill, setQuillInstance: setQuill }}>
-                                            <RumiEditor setProvider={setProvider} />
+                                            <TextEditor setProvider={setProvider} />
                                         </QuillProvider>
                                     </DocumentContainer>
                                     <VersionHistory quill={quill} />
